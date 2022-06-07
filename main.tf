@@ -1,98 +1,63 @@
 
 locals {
-  vpc_id = data.aws_vpc.vpc.id
-  pub_subnet = [for i in data.aws_subnet.public_sub: i.id]
-  pri_subnet = [for i in data.aws_subnet.priv_sub: i.id]
+  vpc_id           = data.aws_vpc.vpc.id
+  pub_subnet       = [for i in data.aws_subnet.public_sub : i.id]
+  pri_subnet       = [for i in data.aws_subnet.priv_sub : i.id]
+  instance_profile = aws_iam_instance_profile.instance_profile.name
 }
 
-data "aws_ami" "ami" {
-  most_recent = true
-
-  owners = ["amazon"]
-
-  filter {
-    name   = "name"
-    values = ["amzn2-ami-kernel-5.10-hvm-*-gp2"]
-  }
-
-  filter {
-    name   = "root-device-type"
-    values = ["ebs"]
-  }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-}
-
-data "aws_key_pair" "keypair" {
-  key_name = "kojitech_keypair"
-}
-
-# we'll use data source to pull priv_subnet_id, pub_subnet
-
-data "aws_vpc" "vpc" {
-    filter {
-      name = "tag:Name"
-      values = ["kojitechs_vpc"]
-    }
-}
-
-# Pulling down priv_subnet 
-data "aws_subnet_ids" "priv_subnet" {
-  vpc_id = local.vpc_id
-    filter {
-      name = "tag:Name"
-      values = ["priv_*"]
-    }
-}
-
-data "aws_subnet_ids" "pub_subnet" {
-  vpc_id = local.vpc_id
-     filter {
-      name = "tag:Name"
-      values = ["pub_*"]
-    }
-}
-
-# priv_subnet
-data "aws_subnet" "priv_sub" {
-  for_each = data.aws_subnet_ids.priv_subnet.ids 
-  id = each.value
-}
-
-# public_subfornet
-data "aws_subnet" "public_sub" {
-    for_each = data.aws_subnet_ids.pub_subnet.ids
-    id = each.value
-}
-
-
-# apache (index.html) # . app1, app2
+### APP1(frontend)
+# apache (index.html) # . app1, app2 (install using userdata)
 resource "aws_instance" "front_endapp1" {
-  ami           = data.aws_ami.ami.id
-  instance_type = "t2.micro"
-  subnet_id     = local.pri_subnet[0]
-  key_name = data.aws_key_pair.keypair.key_name
+  ami                    = data.aws_ami.ami.id
+  instance_type          = "t2.micro"
+  subnet_id              = local.pri_subnet[0]
   vpc_security_group_ids = [aws_security_group.front_app_sg.id]
-  user_data =  file("${path.module}/template/frontend_app1.sh") 
+  user_data              = file("${path.module}/template/frontend_app1.sh")
+  iam_instance_profile   = local.instance_profile
 
   tags = {
     Name = "front_endapp1"
   }
 }
-
+# https://domain_name/
+#### App2(frontend)
 resource "aws_instance" "front_endapp2" {
-  ami           = data.aws_ami.ami.id
-  instance_type = "t2.micro"
-  subnet_id     = local.pri_subnet[1]
-  key_name = data.aws_key_pair.keypair.key_name
+  ami                    = data.aws_ami.ami.id
+  instance_type          = "t2.micro"
+  subnet_id              = local.pri_subnet[1]
   vpc_security_group_ids = [aws_security_group.front_app_sg.id]
-  user_data =  file("${path.module}/template/frontend_app2.sh")
+  user_data              = file("${path.module}/template/frontend_app2.sh")
+  iam_instance_profile   = local.instance_profile
 
   tags = {
     Name = "front_endapp2"
   }
 }
 
+#### registration app (2)
+resource "aws_instance" "registration_app" {
+  depends_on = [module.aurora]
+  count      = length(var.name)
+
+  ami                    = data.aws_ami.ami.id
+  instance_type          = "t2.micro"
+  subnet_id              = element(local.pri_subnet, count.index)
+  iam_instance_profile   = local.instance_profile
+  vpc_security_group_ids = [aws_security_group.registration_app.id]
+  user_data = templatefile("${path.root}/template/registration_app.tpl",
+    {
+      endpoint    = "" # database_endpoint
+      port        = "" # database port 
+      db_name     = "" # database name
+      db_user     = "" # database user
+      db_password = "" # database_password ? 
+    }
+  )
+  tags = {
+    Name = var.name[count.index]
+  }
+}
+
+
+### mysql Aurora database (15m) 

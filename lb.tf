@@ -89,7 +89,7 @@ module "alb" {
           port      = 80
         }
       }
-     
+
     },
     # App3 Target Group - TG Index = 2
     {

@@ -1,6 +1,6 @@
 
 locals {
-   mandatory_tag = {
+  mandatory_tag = {
     line_of_business        = "hospital"
     ado                     = "max"
     tier                    = "WEB"
