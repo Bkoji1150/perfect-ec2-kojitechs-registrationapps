@@ -1,15 +1,13 @@
 
-
 # Terraform AWS Application Load Balancer (ALB)*
-
 module "alb" {
   source  = "terraform-aws-modules/alb/aws"
   version = "6.0.0"
 
   name               = "${var.component_name}-alb"
-  load_balancer_type = "application"
+  load_balancer_type = "application" 
   vpc_id             = local.vpc_id
-  subnets            = local.pri_subnet
+  subnets            = local.pub_subnet
 
   security_groups = [aws_security_group.lb_sg.id]
 
@@ -24,7 +22,7 @@ module "alb" {
         status_code = "HTTP_301"
       }
     }
-  ]
+  ] # https://kokijtechs.com
   # Target Groups
   target_groups = [
     # App1 Target Group - TG Index = 0
@@ -101,7 +99,7 @@ module "alb" {
       health_check = {
         enabled             = true
         interval            = 30
-        path                = "/login"
+        path                = "/login" # login ()
         port                = "traffic-port"
         healthy_threshold   = 3
         unhealthy_threshold = 3
@@ -117,11 +115,11 @@ module "alb" {
       protocol_version = "HTTP1"
       targets = {
         my_app3_vm1 = {
-          target_id = ""
+          target_id = aws_instance.registration_app[0].id
           port      = 8080
         },
         my_app3_vm2 = {
-          target_id = ""
+          target_id = aws_instance.registration_app[1].id
           port      = 8080
         }
       }
@@ -134,7 +132,7 @@ module "alb" {
     {
       port            = 443
       protocol        = "HTTPS"
-      certificate_arn = ""
+      certificate_arn = module.acm.acm_certificate_arn 
       action_type     = "fixed-response"
       fixed_response = {
         content_type = "text/plain"
@@ -185,4 +183,25 @@ module "alb" {
       }]
     },
   ]
+}
+
+resource "aws_route53_record" "dns_record" {
+  zone_id = data.aws_route53_zone.mydomain.zone_id
+  name    = lookup(var.d_name, terraform.workspace)
+  type    = "A" # ip_address
+
+  alias {
+    name                   = module.alb.lb_dns_name
+    zone_id                = module.alb.lb_zone_id
+    evaluate_target_health = true
+  }
+}
+
+module "acm" {
+  source  = "terraform-aws-modules/acm/aws"
+  version = "3.0.0"
+
+  domain_name               = trimsuffix(data.aws_route53_zone.mydomain.name, ".")
+  zone_id                   = data.aws_route53_zone.mydomain.zone_id
+  subject_alternative_names = var.subject_alternative_d_name
 }

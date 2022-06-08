@@ -16,3 +16,15 @@ variable "name" {
   type    = list(any)
   default = ["registration_app1", "registration_app2"]
 }
+
+variable "d_name" {
+  default = {
+    default = "dingatech.com"
+    sbx = ""
+  }
+}
+
+variable "subject_alternative_d_name" {
+  type = list
+  default = ["*.dingatech.com"]
+}

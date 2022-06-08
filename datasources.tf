@@ -61,3 +61,11 @@ data "aws_subnet" "public_sub" {
   for_each = data.aws_subnet_ids.pub_subnet.ids
   id       = each.value
 }
+
+
+# prod.tfvars, sbx.tfvars
+# data.aws_route53_zone.mydomain.name
+data "aws_route53_zone" "mydomain" {
+  name         = lookup(var.d_name, terraform.workspace)
+}
+

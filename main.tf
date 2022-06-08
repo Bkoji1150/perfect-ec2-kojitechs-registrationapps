@@ -36,22 +36,25 @@ resource "aws_instance" "front_endapp2" {
 }
 
 #### registration app (2)
+# we have two instances her
+# aws_instance.registration_app[0].id 
+# 
 resource "aws_instance" "registration_app" {
   depends_on = [module.aurora]
   count      = length(var.name)
 
   ami                    = data.aws_ami.ami.id
-  instance_type          = "t2.micro"
+  instance_type          = "t2.xlarge"
   subnet_id              = element(local.pri_subnet, count.index)
   iam_instance_profile   = local.instance_profile
   vpc_security_group_ids = [aws_security_group.registration_app.id]
-  user_data = templatefile("${path.root}/template/registration_app.tpl",
+  user_data = templatefile("${path.root}/template/registration_app.tmpl",
     {
-      endpoint    = "" # database_endpoint
-      port        = "" # database port 
-      db_name     = "" # database name
-      db_user     = "" # database user
-      db_password = "" # database_password ? 
+      endpoint    = module.aurora.cluster_endpoint
+      port        = module.aurora.cluster_port 
+      db_name     = module.aurora.cluster_database_name
+      db_user     = module.aurora.cluster_master_username 
+      db_password = module.aurora.cluster_master_password 
     }
   )
   tags = {

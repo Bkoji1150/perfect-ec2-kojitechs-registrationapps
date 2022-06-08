@@ -19,6 +19,13 @@ resource "aws_security_group" "lb_sg" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+   ingress {
+    description = "allow registraion app"
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
   egress {
     from_port   = 0
@@ -34,7 +41,7 @@ resource "aws_security_group" "lb_sg" {
 
 #security group for app_1 and app_2
 resource "aws_security_group" "front_app_sg" {
-  name        = "http"
+  name        = "front_app_sg"
   description = "allow http"
   vpc_id      = local.vpc_id
 
@@ -61,7 +68,7 @@ resource "aws_security_group" "front_app_sg" {
 #sg for registration_app
 # [aws_security_group.registration_app.id]
 resource "aws_security_group" "registration_app" {
-  name        = "http"
+  name        = "registration_app"
   description = "allow http"
   vpc_id      = local.vpc_id
 

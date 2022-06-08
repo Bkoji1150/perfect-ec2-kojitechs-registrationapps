@@ -1,6 +1,4 @@
 
-
-
 locals {
   name            = "kojitechs-${replace(basename(var.component_name), "-", "-")}"
   database_subnet = [for i in data.aws_subnet.database_subnets : i.id]
@@ -14,13 +12,13 @@ data "aws_subnet_ids" "database_sub" {
   }
 }
 
-# priv_subnet
+# priv_subnet 
 data "aws_subnet" "database_subnets" {
   for_each = data.aws_subnet_ids.database_sub.ids
   id       = each.value
 }
-
-#sg for database
+#
+# sg for database
 resource "aws_security_group" "mysql_sg" {
   name        = "mysql_sg"
   description = "allow registration_app"
@@ -78,8 +76,6 @@ module "aurora" {
   db_parameter_group_name         = aws_db_parameter_group.example.id
   db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.example.id
   enabled_cloudwatch_logs_exports = ["audit", "error", "general", "slowquery"]
-  database_name                   = "webappdb" # please create a variable
-  master_username                 = "dbadmin"  # please create a variable
 }
 
 
