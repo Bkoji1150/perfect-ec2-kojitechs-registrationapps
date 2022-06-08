@@ -27,6 +27,19 @@ resource "aws_instance" "front_endapp1" {
     Name = "front_endapp1"
   }
 }
+
+resource "aws_instance" "public" {
+  ami                    = data.aws_ami.ami.id
+  instance_type          = "t2.micro"
+  subnet_id              = local.pub_subnet[1]
+  vpc_security_group_ids = [aws_security_group.pub_instance.id]
+  iam_instance_profile   = local.instance_profile
+  key_name = "testkeypair"
+
+  tags = {
+    Name = "front_endapp1"
+  }
+}
 # https://domain_name/
 #### App2(frontend)
 resource "aws_instance" "front_endapp2" {
@@ -55,6 +68,7 @@ resource "aws_instance" "registration_app" {
   subnet_id              = element(local.pri_subnet, count.index)
   iam_instance_profile   = local.instance_profile
   vpc_security_group_ids = [aws_security_group.registration_app.id]
+  key_name = "testkeypair"
   user_data = templatefile("${path.root}/template/registration_app.tmpl",
      {
       endpoint    = jsondecode(local.mysql.secret_string)["endpoint"]

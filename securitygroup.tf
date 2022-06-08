@@ -74,7 +74,7 @@ resource "aws_security_group" "registration_app" {
     from_port       = 8080
     to_port         = 8080
     protocol        = "tcp"
-    security_groups = [aws_security_group.lb_sg.id]
+    security_groups = [aws_security_group.lb_sg.id, aws_security_group.pub_instance.id]
   }
 
   egress {
@@ -93,4 +93,31 @@ resource "aws_security_group" "registration_app" {
 }
 
 
+#security group for app_1 and app_2
+resource "aws_security_group" "pub_instance" {
+  name        = "pub_instance"
+  description = "allow http"
+  vpc_id      = local.vpc_id
 
+  ingress {
+    description     = "allow http"
+    from_port       = 22
+    to_port         = 22
+    protocol        = "tcp"
+     cidr_blocks     = ["71.163.242.34/32"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "pub_instance"
+  }
+   lifecycle {
+    create_before_destroy = true
+  }
+}
