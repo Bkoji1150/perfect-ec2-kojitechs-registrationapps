@@ -27,7 +27,7 @@ module "alb" {
   target_groups = [
     # App1 Target Group - TG Index = 0
     {
-      name_prefix          = "app1"
+      name_prefix          = "app1-"
       backend_protocol     = "HTTP"
       backend_port         = 80
       target_type          = "instance"
@@ -59,7 +59,7 @@ module "alb" {
     },
     # App2 Target Group - TG Index = 1
     {
-      name_prefix          = "app2"
+      name_prefix          = "app2-"
       backend_protocol     = "HTTP"
       backend_port         = 80
       target_type          = "instance"
@@ -91,7 +91,7 @@ module "alb" {
     },
     # App3 Target Group - TG Index = 2
     {
-      name_prefix          = "app3"
+      name_prefix          = "app3-"
       backend_protocol     = "HTTP"
       backend_port         = 8080
       target_type          = "instance"
@@ -183,6 +183,7 @@ module "alb" {
       }]
     },
   ]
+
 }
 
 resource "aws_route53_record" "dns_record" {
