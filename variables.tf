@@ -19,12 +19,20 @@ variable "name" {
 
 variable "d_name" {
   default = {
-    default = "dingatech.com"
-    sbx = ""
+    prod = "kojitechs.com"
+    sbx = "kelderanyi.com"
   }
 }
 
-variable "subject_alternative_d_name" {
-  type = list
-  default = ["*.dingatech.com"]
+
+
+variable "environment" {
+  description = "Environment this template would be deployed to"
+  type        = map(string)
+  default     = {}
+}
+
+variable "subject_alternative_names" {
+  type    = map(string)
+  default = {}
 }

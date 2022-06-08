@@ -203,5 +203,5 @@ module "acm" {
 
   domain_name               = trimsuffix(data.aws_route53_zone.mydomain.name, ".")
   zone_id                   = data.aws_route53_zone.mydomain.zone_id
-  subject_alternative_names = var.subject_alternative_d_name
+  subject_alternative_names = tolist([lookup(var.subject_alternative_names, terraform.workspace)]) # var.subject_alternative_d_name 
 }
