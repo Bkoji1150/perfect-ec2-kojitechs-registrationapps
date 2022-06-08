@@ -37,6 +37,9 @@ resource "aws_security_group" "lb_sg" {
   tags = {
     Name = "lb_sg"
   }
+   lifecycle {
+    create_before_destroy = true
+  }
 }
 
 #security group for app_1 and app_2
@@ -62,6 +65,9 @@ resource "aws_security_group" "front_app_sg" {
 
   tags = {
     Name = "front_app"
+  }
+   lifecycle {
+    create_before_destroy = true
   }
 }
 
@@ -104,6 +110,9 @@ resource "aws_security_group" "registration_app" {
 
   tags = {
     Name = "registration_app"
+  }
+   lifecycle {
+    create_before_destroy = true
   }
 }
 
