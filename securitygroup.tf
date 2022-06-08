@@ -74,7 +74,14 @@ resource "aws_security_group" "registration_app" {
     from_port       = 8080
     to_port         = 8080
     protocol        = "tcp"
-    security_groups = [aws_security_group.lb_sg.id, aws_security_group.pub_instance.id]
+    security_groups = [aws_security_group.lb_sg.id]
+  }
+   ingress {
+    description     = "allow ssh"
+    from_port       = 22
+    to_port         = 22
+    protocol        = "tcp"
+     cidr_blocks     = [aws_security_group.pub_instance.id]
   }
 
   egress {
