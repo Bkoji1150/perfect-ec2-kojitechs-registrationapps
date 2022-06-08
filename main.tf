@@ -62,5 +62,4 @@ resource "aws_instance" "registration_app" {
   }
 }
 
-
 ### mysql Aurora database (15m) 
