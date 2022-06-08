@@ -37,7 +37,7 @@ resource "aws_instance" "public" {
   key_name = "testkeypair"
 
   tags = {
-    Name = "front_endapp1"
+    Name = "public"
   }
 }
 # https://domain_name/
