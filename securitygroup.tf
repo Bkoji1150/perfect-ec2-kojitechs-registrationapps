@@ -81,7 +81,7 @@ resource "aws_security_group" "registration_app" {
     from_port       = 22
     to_port         = 22
     protocol        = "tcp"
-     cidr_blocks     = [aws_security_group.pub_instance.id]
+    security_groups     = [aws_security_group.pub_instance.id]
   }
 
   egress {
