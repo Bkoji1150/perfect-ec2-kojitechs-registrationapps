@@ -4,6 +4,8 @@ locals {
   database_subnet = [for i in data.aws_subnet.database_subnets : i.id]
 }
 
+
+
 data "aws_subnet_ids" "database_sub" {
   vpc_id = local.vpc_id
   filter {

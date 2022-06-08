@@ -4,6 +4,13 @@ locals {
   pub_subnet       = [for i in data.aws_subnet.public_sub : i.id]
   pri_subnet       = [for i in data.aws_subnet.priv_sub : i.id]
   instance_profile = aws_iam_instance_profile.instance_profile.name
+  mysql = data.aws_secretsmanager_secret_version.rds_secret_target
+}
+
+data "aws_secretsmanager_secret_version" "rds_secret_target" {
+
+  depends_on = [module.aurora]
+  secret_id  = module.aurora.secrets_version
 }
 
 ### APP1(frontend)
@@ -49,12 +56,12 @@ resource "aws_instance" "registration_app" {
   iam_instance_profile   = local.instance_profile
   vpc_security_group_ids = [aws_security_group.registration_app.id]
   user_data = templatefile("${path.root}/template/registration_app.tmpl",
-    {
-      endpoint    = module.aurora.cluster_endpoint
-      port        = module.aurora.cluster_port 
-      db_name     = module.aurora.cluster_database_name
-      db_user     = module.aurora.cluster_master_username 
-      db_password = module.aurora.cluster_master_password 
+     {
+      endpoint    = jsondecode(local.mysql.secret_string)["endpoint"]
+      port        = jsondecode(local.mysql.secret_string)["port"]
+      db_name     = jsondecode(local.mysql.secret_string)["dbname"]
+      db_user     = jsondecode(local.mysql.secret_string)["username"]
+      db_password = jsondecode(local.mysql.secret_string)["password"]
     }
   )
   tags = {
