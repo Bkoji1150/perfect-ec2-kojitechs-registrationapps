@@ -63,6 +63,6 @@ data "aws_subnet" "public_sub" {
 }
 
 data "aws_route53_zone" "mydomain" {
-  name         = lookup(var.d_name, terraform.workspace)
+  name = lookup(var.d_name, terraform.workspace)
 }
 

@@ -5,7 +5,7 @@ module "alb" {
   version = "6.0.0"
 
   name               = "${var.component_name}-alb"
-  load_balancer_type = "application" 
+  load_balancer_type = "application"
   vpc_id             = local.vpc_id
   subnets            = local.pub_subnet
 
@@ -47,11 +47,11 @@ module "alb" {
       #   App1 Target Group - Targets
       targets = {
         my_app1_vm1 = {
-          target_id = aws_instance.front_endapp1.id
+          target_id = aws_instance.frond_end["app1"].id
           port      = 80
         },
         my_app1_vm2 = {
-          target_id = aws_instance.front_endapp1.id
+          target_id = aws_instance.frond_end["app1"].id
           port      = 80
         }
       }
@@ -79,11 +79,11 @@ module "alb" {
       # App2 Target Group - Targets
       targets = {
         my_app2_vm1 = {
-          target_id = aws_instance.front_endapp2.id
+          target_id = aws_instance.frond_end["app2"].id
           port      = 80
         },
         my_app2_vm2 = {
-          target_id = aws_instance.front_endapp2.id
+          target_id = aws_instance.frond_end["app2"].id
           port      = 80
         }
       }
@@ -132,7 +132,7 @@ module "alb" {
     {
       port            = 443
       protocol        = "HTTPS"
-      certificate_arn = module.acm.acm_certificate_arn 
+      certificate_arn = module.acm.acm_certificate_arn
       action_type     = "fixed-response"
       fixed_response = {
         content_type = "text/plain"

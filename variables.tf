@@ -20,7 +20,7 @@ variable "name" {
 variable "d_name" {
   default = {
     prod = "kojitechs.com"
-    sbx = "kelderanyi.com"
+    sbx  = "kelderanyi.com"
   }
 }
 

@@ -59,7 +59,7 @@ module "aurora" {
     }
     2 = {
       identifier     = format("%s-%s", "kojitechs-${var.component_name}", "reader-instance")
-      instance_class =  "db.r5.2xlarge"
+      instance_class = "db.r5.2xlarge"
       promotion_tier = 15
     }
   }

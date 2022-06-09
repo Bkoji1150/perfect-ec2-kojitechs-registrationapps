@@ -29,7 +29,7 @@ resource "aws_security_group" "lb_sg" {
   tags = {
     Name = "lb_sg"
   }
-   lifecycle {
+  lifecycle {
     create_before_destroy = true
   }
 }
@@ -47,7 +47,7 @@ resource "aws_security_group" "front_app_sg" {
     protocol        = "tcp"
     security_groups = [aws_security_group.lb_sg.id]
   }
-    ingress {
+  ingress {
     description     = "allow http"
     from_port       = 443
     to_port         = 443
@@ -65,7 +65,7 @@ resource "aws_security_group" "front_app_sg" {
   tags = {
     Name = "front_app"
   }
-   lifecycle {
+  lifecycle {
     create_before_destroy = true
   }
 }
@@ -91,7 +91,7 @@ resource "aws_security_group" "registration_app" {
   tags = {
     Name = "registration_app"
   }
-   lifecycle {
+  lifecycle {
     create_before_destroy = true
   }
 }
