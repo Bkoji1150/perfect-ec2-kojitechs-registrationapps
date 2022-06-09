@@ -47,6 +47,13 @@ resource "aws_security_group" "front_app_sg" {
     protocol        = "tcp"
     security_groups = [aws_security_group.lb_sg.id]
   }
+    ingress {
+    description     = "allow http"
+    from_port       = 443
+    to_port         = 443
+    protocol        = "tcp"
+    security_groups = [aws_security_group.lb_sg.id]
+  }
 
   egress {
     from_port   = 0
@@ -63,8 +70,6 @@ resource "aws_security_group" "front_app_sg" {
   }
 }
 
-#sg for registration_app
-# [aws_security_group.registration_app.id]
 resource "aws_security_group" "registration_app" {
   name        = "registration_app"
   description = "allow http"
@@ -76,14 +81,6 @@ resource "aws_security_group" "registration_app" {
     protocol        = "tcp"
     security_groups = [aws_security_group.lb_sg.id]
   }
-   ingress {
-    description     = "allow ssh"
-    from_port       = 22
-    to_port         = 22
-    protocol        = "tcp"
-    security_groups     = [aws_security_group.pub_instance.id]
-  }
-
   egress {
     from_port   = 0
     to_port     = 0
@@ -93,36 +90,6 @@ resource "aws_security_group" "registration_app" {
 
   tags = {
     Name = "registration_app"
-  }
-   lifecycle {
-    create_before_destroy = true
-  }
-}
-
-
-#security group for app_1 and app_2
-resource "aws_security_group" "pub_instance" {
-  name        = "pub_instance"
-  description = "allow http"
-  vpc_id      = local.vpc_id
-
-  ingress {
-    description     = "allow http"
-    from_port       = 22
-    to_port         = 22
-    protocol        = "tcp"
-     cidr_blocks     = ["71.163.242.34/32"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name = "pub_instance"
   }
    lifecycle {
     create_before_destroy = true
