@@ -47,7 +47,7 @@ resource "aws_security_group" "mysql_sg" {
 }
 
 module "aurora" {
-  source = "git::https://github.com/Bkoji1150/aws-rdscluster-kojitechs-tf.git" # a
+  source = "git::https://github.com/Bkoji1150/aws-rdscluster-kojitechs-tf.git"
 
   name           = local.name
   engine         = "aurora-mysql"
@@ -57,7 +57,7 @@ module "aurora" {
       instance_class      = "db.r5.large"
       publicly_accessible = false
     }
-    1 = {
+    2 = {
       identifier     = format("%s-%s", "kojitechs-${var.component_name}", "reader-instance")
       instance_class =  "db.r5.2xlarge"
       promotion_tier = 15
