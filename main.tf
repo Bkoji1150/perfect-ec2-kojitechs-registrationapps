@@ -55,7 +55,6 @@ resource "aws_instance" "registration_app" {
   subnet_id              = element(local.pri_subnet, count.index)
   iam_instance_profile   = local.instance_profile
   vpc_security_group_ids = [aws_security_group.registration_app.id]
-  key_name = "testkeypair"
   user_data = templatefile("${path.root}/template/registration_app.tmpl",
      {
       endpoint    = jsondecode(local.mysql.secret_string)["endpoint"]
