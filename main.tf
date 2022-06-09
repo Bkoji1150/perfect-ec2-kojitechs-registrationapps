@@ -13,7 +13,7 @@ locals {
     }
     "app2" = {
       instance_type = "t2.xlarge"
-      subnet_id     = local.pub_subnet[0]
+      subnet_id     = local.pri_subnet[1]
       user_data     = file("${path.module}/template/frontend_app2.sh")
     }
   }
