@@ -18,13 +18,9 @@ variable "name" {
 }
 
 variable "d_name" {
-  default = {
-    default = "dingatech.com"
-    sbx = ""
-  }
+  type = map(any) 
 }
 
 variable "subject_alternative_d_name" {
   type = list
-  default = ["*.dingatech.com"]
 }

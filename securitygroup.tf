@@ -53,6 +53,14 @@ resource "aws_security_group" "front_app_sg" {
     security_groups = [aws_security_group.lb_sg.id]
   }
 
+  ingress {
+    description     = "allow https"
+    from_port       = 443
+    to_port         = 443
+    protocol        = "tcp"
+    security_groups = [aws_security_group.lb_sg.id]
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
@@ -71,21 +79,6 @@ resource "aws_security_group" "registration_app" {
   name        = "registration_app"
   description = "allow http"
   vpc_id      = local.vpc_id
-
-  ingress {
-    description     = "allow from load_balancer"
-    from_port       = 80
-    to_port         = 80
-    protocol        = "tcp"
-    security_groups = [aws_security_group.lb_sg.id]
-  }
-  ingress {
-    description     = "allow from load_balancer"
-    from_port       = 443
-    to_port         = 443
-    protocol        = "tcp"
-    security_groups = [aws_security_group.lb_sg.id]
-  }
 
   ingress {
     description     = "allow from load_balancer"
