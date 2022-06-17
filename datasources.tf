@@ -62,7 +62,7 @@ data "aws_ami" "ami" {
 #   id       = each.value
 # }
 
-# data "aws_route53_zone" "mydomain" {
-#   name = lookup(var.d_name, terraform.workspace)
-# }
+data "aws_route53_zone" "mydomain" {
+  name = lookup(var.d_name, terraform.workspace)
+}
 
