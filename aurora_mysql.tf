@@ -5,19 +5,19 @@ locals {
 
 
 
-data "aws_subnet_ids" "database_sub" {
-  vpc_id = local.vpc_id
-  filter {
-    name   = "tag:Name"
-    values = ["database_*"]
-  }
-}
+# data "aws_subnet_ids" "database_sub" {
+#   vpc_id = local.vpc_id
+#   filter {
+#     name   = "tag:Name"
+#     values = ["database_*"]
+#   }
+# }
 
-# priv_subnet 
-data "aws_subnet" "database_subnets" {
-  for_each = data.aws_subnet_ids.database_sub.ids
-  id       = each.value
-}
+# # priv_subnet 
+# data "aws_subnet" "database_subnets" {
+#   for_each = data.aws_subnet_ids.database_sub.ids
+#   id       = each.value
+# }
 #
 # sg for database
 resource "aws_security_group" "mysql_sg" {
