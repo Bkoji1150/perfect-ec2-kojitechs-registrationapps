@@ -63,6 +63,6 @@ data "aws_ami" "ami" {
 # }
 
 data "aws_route53_zone" "mydomain" {
-  name = lookup(var.d_name, terraform.workspace)
+  name = var.dns_name
 }
 
