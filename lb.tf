@@ -188,7 +188,7 @@ module "alb" {
 
 resource "aws_route53_record" "dns_record" {
   zone_id = data.aws_route53_zone.mydomain.zone_id
-  name    = lookup(var.d_name, terraform.workspace)
+  name    = var.dns_name
   type    = "A" # ip_address
 
   alias {
@@ -204,5 +204,5 @@ module "acm" {
 
   domain_name               = trimsuffix(data.aws_route53_zone.mydomain.name, ".")
   zone_id                   = data.aws_route53_zone.mydomain.zone_id
-  subject_alternative_names = tolist([lookup(var.subject_alternative_names, terraform.workspace)]) # var.subject_alternative_d_name 
+  subject_alternative_names = var.subject_alternative_names
 }
