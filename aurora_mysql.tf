@@ -3,22 +3,6 @@ locals {
   name            = "kojitechs-${replace(basename(var.component_name), "-", "-")}"
 }
 
-
-
-# data "aws_subnet_ids" "database_sub" {
-#   vpc_id = local.vpc_id
-#   filter {
-#     name   = "tag:Name"
-#     values = ["database_*"]
-#   }
-# }
-
-# # priv_subnet 
-# data "aws_subnet" "database_subnets" {
-#   for_each = data.aws_subnet_ids.database_sub.ids
-#   id       = each.value
-# }
-#
 # sg for database
 resource "aws_security_group" "mysql_sg" {
   name        = "mysql_sg"
@@ -50,7 +34,7 @@ module "aurora" {
 
   name           = local.name
   engine         = "aurora-mysql"
-  engine_version = "5.7.12"
+  engine_version = "5.7.mysql_aurora.2.10.1"
   instances = {
     1 = {
       instance_class      = "db.r5.large"
