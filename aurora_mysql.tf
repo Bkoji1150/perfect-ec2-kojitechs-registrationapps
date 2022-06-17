@@ -1,7 +1,6 @@
 
 locals {
   name            = "kojitechs-${replace(basename(var.component_name), "-", "-")}"
-  database_subnet = [for i in data.aws_subnet.database_subnets : i.id]
 }
 
 
