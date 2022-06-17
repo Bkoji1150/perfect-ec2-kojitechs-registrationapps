@@ -17,22 +17,17 @@ variable "name" {
   default = ["registration_app1", "registration_app2"]
 }
 
-variable "d_name" {
-  default = {
-    prod = "kojitechs.com"
-    sbx  = "kelderanyi.com"
-  }
+variable "dns_name" {
+  type = string
 }
 
+variable "subject_alternative_names" {
+  type    = list(any)
+}
 
 
 variable "environment" {
   description = "Environment this template would be deployed to"
   type        = map(string)
   default     = {}
-}
-
-variable "subject_alternative_names" {
-  type    = map(string)
-  default = {}
 }
