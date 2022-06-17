@@ -1,8 +1,24 @@
 
+data "terraform_remote_state" "operational_environment" {
+  backend = "s3"
+
+  config = {
+    region = "us-east-1"
+    bucket = "operational.vpc.tf.kojitechs"
+    key    = format("env:/%s/path/env", lower(terraform.workspace))
+  }
+}
+
 locals {
-  vpc_id           = data.aws_vpc.vpc.id
-  pub_subnet       = [for i in data.aws_subnet.public_sub : i.id]
-  pri_subnet       = [for i in data.aws_subnet.priv_sub : i.id]
+  operational_state    = data.terraform_remote_state.operational_environment.outputs
+  vpc_id               = local.operational_state.vpc_id
+  pub_subnet        = local.operational_state.public_subnets
+  pri_subnet      = local.operational_state.private_subnets
+  private_sunbet_cidrs = local.operational_state.private_subnets_cidrs
+  database_subnet      = local.operational_state.database_subnets
+#   vpc_id           = data.aws_vpc.vpc.id
+#   pub_subnet       = [for i in data.aws_subnet.public_sub : i.id]
+#   pri_subnet       = [for i in data.aws_subnet.priv_sub : i.id]
   instance_profile = aws_iam_instance_profile.instance_profile.name
   mysql            = data.aws_secretsmanager_secret_version.rds_secret_target
   instances = {
@@ -24,6 +40,7 @@ data "aws_secretsmanager_secret_version" "rds_secret_target" {
   depends_on = [module.aurora]
   secret_id  = module.aurora.secrets_version
 }
+    
 
 
 resource "aws_instance" "frond_end" {
