@@ -44,7 +44,7 @@ resource "aws_instance" "registration_app" {
   count      = length(var.name)
 
   ami                    = data.aws_ami.ami.id
-  instance_type          = "t2.xlarge"
+  instance_type          = terraform.workspace == "prod" ? "t2.xlarge" : "t2.large"
   subnet_id              = element(local.pri_subnet, count.index)
   iam_instance_profile   = local.instance_profile
   vpc_security_group_ids = [aws_security_group.registration_app.id]

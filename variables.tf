@@ -24,3 +24,8 @@ variable "d_name" {
 variable "subject_alternative_d_name" {
   type = list
 }
+
+variable "env" {
+type = map(any)
+  
+}

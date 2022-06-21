@@ -1,6 +1,10 @@
+
+env = {
+  prod  = "524913668773"
+}
+
 d_name = {
-    default = "dingatech.com"
-    sbx = ""
+    prod = "dingatech.com"
   }
 
   subject_alternative_d_name = [ "*.dingatech.com" ]
