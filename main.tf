@@ -1,10 +1,29 @@
 
-locals {
-  vpc_id           = data.aws_vpc.vpc.id
-  pub_subnet       = [for i in data.aws_subnet.public_sub : i.id]
-  pri_subnet       = [for i in data.aws_subnet.priv_sub : i.id]
-  instance_profile = aws_iam_instance_profile.instance_profile.name
+# output
+# state bucket
+# {}, 
+
+data "terraform_remote_state" "operation_environment_networking" {
+  backend = "s3"
+
+  config = {
+    region = "us-east-1"
+    bucket = "kojitechs-deploy-vpcchildmodule.tf-12"
+    key    = format("env:/%s/path/env", terraform.workspace)
+  }
 }
+
+
+locals {
+  operational_env  = data.terraform_remote_state.operation_environment_networking.outputs
+  vpc_id           = local.operational_env.vpc_id
+  pub_subnet       = local.operational_env.public_subnet
+  pri_subnet       = local.operational_env.private_subnet
+  database_subnet  = local.operational_env.database_subnet
+  instance_profile = aws_iam_instance_profile.instance_profile.name
+  name             = "kojitechs-${replace(basename(var.component_name), "-", "-")}"
+}
+
 
 ### APP1(frontend)
 # apache (index.html) # . app1, app2 (install using userdata)
@@ -51,10 +70,10 @@ resource "aws_instance" "registration_app" {
   user_data = templatefile("${path.root}/template/registration_app.tmpl",
     {
       endpoint    = module.aurora.cluster_endpoint
-      port        = module.aurora.cluster_port 
+      port        = module.aurora.cluster_port
       db_name     = module.aurora.cluster_database_name
-      db_user     = module.aurora.cluster_master_username 
-      db_password = module.aurora.cluster_master_password 
+      db_user     = module.aurora.cluster_master_username
+      db_password = module.aurora.cluster_master_password
     }
   )
   tags = {

@@ -5,7 +5,7 @@ module "alb" {
   version = "6.0.0"
 
   name               = "${var.component_name}-alb"
-  load_balancer_type = "application" 
+  load_balancer_type = "application"
   vpc_id             = local.vpc_id
   subnets            = local.pub_subnet
 
@@ -132,7 +132,7 @@ module "alb" {
     {
       port            = 443
       protocol        = "HTTPS"
-      certificate_arn = module.acm.acm_certificate_arn 
+      certificate_arn = module.acm.acm_certificate_arn
       action_type     = "fixed-response"
       fixed_response = {
         content_type = "text/plain"

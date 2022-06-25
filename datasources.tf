@@ -1,3 +1,8 @@
+
+data "aws_route53_zone" "mydomain" {
+  name         = lookup(var.d_name, terraform.workspace)
+}
+
 data "aws_ami" "ami" {
   most_recent = true
 
@@ -25,6 +30,7 @@ data "aws_ami" "ami" {
 
 # we'll use data source to pull priv_subnet_id, pub_subnet
 
+/*
 data "aws_vpc" "vpc" {
   filter {
     name   = "tag:Name"
@@ -64,8 +70,4 @@ data "aws_subnet" "public_sub" {
 
 
 # prod.tfvars, sbx.tfvars
-# data.aws_route53_zone.mydomain.name
-data "aws_route53_zone" "mydomain" {
-  name         = lookup(var.d_name, terraform.workspace)
-}
-
+*/

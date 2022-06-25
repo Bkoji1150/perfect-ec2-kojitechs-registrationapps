@@ -99,6 +99,3 @@ resource "aws_security_group" "registration_app" {
     Name = "registration_app"
   }
 }
-
-
-

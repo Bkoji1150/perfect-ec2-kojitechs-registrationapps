@@ -4,7 +4,7 @@ env = {
 }
 
 d_name = {
-    sbx = "germa.click"
-  }
+  sbx = "germa.click"
+}
 
-  subject_alternative_d_name = [ "*.germa.click" ]
+subject_alternative_d_name = ["*.germa.click"]

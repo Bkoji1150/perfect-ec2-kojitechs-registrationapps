@@ -36,38 +36,15 @@ resource "aws_iam_policy" "policy" {
   "Statement": [
     {
       "Action": [
-        "logs:CreateLogGroup",
-        "logs:CreateLogStream",
-        "logs:PutLogEvents",
-          "ec2:*",
-          "ec2messages:*",
-          "ecr:*",
-          "ecs:*",
-          "elasticfilesystem:*",
-          "elasticache:*",
-          "elasticloadbalancing:*",
-          "es:*",
-          "events:*",
-          "iam:*",
-          "kms:*",
-          "lambda:*",
-          "logs:*",
-          "rds:*",
-          "route53:*",
-          "ssm:*",
-          "ssmmessages:*",
-          "s3:*",
-          "sns:*",
-          "sqs:*",
-          "ec2:DescribeNetworkInterfaces",
-          "ec2:CreateNetworkInterface",
-          "ec2:DeleteNetworkInterface",
-          "ec2:DescribeInstances",
-          "ec2:AttachNetworkInterface"
+         "ssm:UpdateInstanceInformation",
+          "ssmmessages:CreateControlChannel",
+          "ssmmessages:CreateDataChannel",
+          "ssmmessages:OpenControlChannel",
+          "ssmmessages:OpenDataChannel"
       ],
       "Resource": "*",
       "Effect": "Allow"
-    }
+    }   
   ]
 }
 EOF

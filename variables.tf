@@ -18,14 +18,14 @@ variable "name" {
 }
 
 variable "d_name" {
-  type = map(any) 
+  type = map(any)
 }
 
 variable "subject_alternative_d_name" {
-  type = list
+  type = list(any)
 }
 
 variable "env" {
-type = map(any)
-  
+  type = map(any)
+
 }
