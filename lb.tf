@@ -132,7 +132,7 @@ module "alb" {
     {
       port            = 443
       protocol        = "HTTPS"
-      certificate_arn = module.acm.acm_certificate_arn
+      certificate_arn = "" # module.acm.acm_certificate_arn
       action_type     = "fixed-response"
       fixed_response = {
         content_type = "text/plain"
@@ -197,11 +197,11 @@ resource "aws_route53_record" "dns_record" {
   }
 }
 
-module "acm" {
-  source  = "terraform-aws-modules/acm/aws"
-  version = "3.0.0"
+# module "acm" {
+#   source  = "terraform-aws-modules/acm/aws"
+#   version = "3.0.0"
 
-  domain_name               = trimsuffix(data.aws_route53_zone.mydomain.name, ".")
-  zone_id                   = data.aws_route53_zone.mydomain.zone_id
-  subject_alternative_names = var.subject_alternative_d_name
-}
+#   domain_name               = trimsuffix(data.aws_route53_zone.mydomain.name, ".")
+#   zone_id                   = data.aws_route53_zone.mydomain.zone_id
+#   subject_alternative_names = var.subject_alternative_d_name
+# }

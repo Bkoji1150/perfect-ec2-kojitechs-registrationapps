@@ -20,7 +20,6 @@ This project was created to build registrion application for kojitechs. [GitHub 
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_acm"></a> [acm](#module\_acm) | terraform-aws-modules/acm/aws | 3.0.0 |
 | <a name="module_alb"></a> [alb](#module\_alb) | terraform-aws-modules/alb/aws | 6.0.0 |
 | <a name="module_aurora"></a> [aurora](#module\_aurora) | git::https://github.com/Bkoji1150/aws-rdscluster-kojitechs-tf.git | n/a |
 

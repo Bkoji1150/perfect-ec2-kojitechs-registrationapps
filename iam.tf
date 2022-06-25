@@ -1,6 +1,6 @@
 
 resource "aws_iam_role" "ssm_fleet_ec2" {
-  name = "ssm_fleet_ec2"
+  name = "registrion_role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -23,12 +23,12 @@ resource "aws_iam_role" "ssm_fleet_ec2" {
 
 # To reference this to ec2 we have to pass ===> aws_iam_instance_profile.instance_profile.name
 resource "aws_iam_instance_profile" "instance_profile" {
-  name = "instance_profile"
+  name = "registrion_profile"
   role = aws_iam_role.ssm_fleet_ec2.name
 }
 
 resource "aws_iam_policy" "policy" {
-  name        = "ssm_policy"
+  name        = "registration_policy"
   description = "Access  policy of ec2 to ssm fleet"
   policy      = <<EOF
 {

@@ -24,7 +24,8 @@ locals {
   name             = "kojitechs-${replace(basename(var.component_name), "-", "-")}"
 }
 
-
+# sas, r, spss
+# 
 ### APP1(frontend)
 # apache (index.html) # . app1, app2 (install using userdata)
 resource "aws_instance" "front_endapp1" {
