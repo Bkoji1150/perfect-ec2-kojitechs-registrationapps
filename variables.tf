@@ -31,3 +31,15 @@ variable "environment" {
   type        = map(string)
   default     = {}
 }
+
+
+variable "master_username" {
+  description = "Username for the master DB user"
+  type        = string
+}
+
+variable "database_name" {
+  description = "Name for an automatically created database on cluster creation"
+  type        = string
+}
+
