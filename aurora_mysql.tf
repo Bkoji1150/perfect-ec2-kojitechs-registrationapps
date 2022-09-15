@@ -52,6 +52,6 @@ module "aurora" {
   apply_immediately                   = true
   skip_final_snapshot                 = true
   enabled_cloudwatch_logs_exports     = ["postgresql"]
-#   database_name                       = var.database_name
-#   master_username                     = var.master_username
+  database_name                       = var.database_name
+  master_username                     = var.master_username
 }
