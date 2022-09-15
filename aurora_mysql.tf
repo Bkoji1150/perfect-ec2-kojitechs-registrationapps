@@ -30,48 +30,28 @@ resource "aws_security_group" "mysql_sg" {
 }
 
 module "aurora" {
-  source = "git::https://github.com/Bkoji1150/aws-rdscluster-kojitechs-tf.git"
+  source = "git::https://github.com/Bkoji1150/aws-rdscluster-kojitechs-tf.git?ref=v1.1.0"
 
+  component_name = var.component_name
   name           = local.name
-  engine         = "aurora-mysql"
-  engine_version = "5.7.mysql_aurora.2.10.1"
+  engine         = "aurora-postgresql"
+  engine_version = "11.15"
   instances = {
     1 = {
-      instance_class      = "db.r5.large"
+      instance_class      = "db.r5.2xlarge"
       publicly_accessible = false
     }
-    2 = {
-      identifier     = format("%s-%s", "kojitechs-${var.component_name}", "reader-instance")
-      instance_class = "db.r5.2xlarge"
-      promotion_tier = 15
-    }
   }
+
   vpc_id                 = local.vpc_id
-  vpc_security_group_ids = [aws_security_group.mysql_sg.id]
   create_db_subnet_group = true
-  create_security_group  = false
-  subnets                = local.database_subnet
+  subnets                = local.private_subnets
+  vpc_security_group_ids = [aws_security_group.mysql_sg.id]
 
   iam_database_authentication_enabled = true
-  create_random_password              = false
-
-  apply_immediately   = false
-  skip_final_snapshot = true
-
-  db_parameter_group_name         = aws_db_parameter_group.example.id
-  db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.example.id
-  enabled_cloudwatch_logs_exports = ["audit", "error", "general", "slowquery"]
-}
-
-
-resource "aws_db_parameter_group" "example" {
-  name        = "${local.name}-aurora-db-57-parameter-group"
-  family      = "aurora-mysql5.7"
-  description = "${local.name}-aurora-db-57-parameter-group"
-}
-
-resource "aws_rds_cluster_parameter_group" "example" {
-  name        = "${local.name}-aurora-57-cluster-parameter-group"
-  family      = "aurora-mysql5.7"
-  description = "${local.name}-aurora-57-cluster-parameter-group"
+  apply_immediately                   = true
+  skip_final_snapshot                 = true
+  enabled_cloudwatch_logs_exports     = ["postgresql"]
+  database_name                       = var.database_name
+  master_username                     = var.master_username
 }
