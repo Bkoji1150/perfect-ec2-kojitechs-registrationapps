@@ -188,7 +188,7 @@ module "alb" {
 
 resource "aws_route53_record" "dns_record" {
   zone_id = data.aws_route53_zone.mydomain.zone_id
-  name    = var.dns_name
+  name    = "registration-to-kojitechs.kelderanyi.com"
   type    = "A" # ip_address
 
   alias {
