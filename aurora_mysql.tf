@@ -45,13 +45,13 @@ module "aurora" {
 
   vpc_id                 = local.vpc_id
   create_db_subnet_group = true
-  subnets                = local.private_subnets
+  subnets                = local.pri_subnet
   vpc_security_group_ids = [aws_security_group.mysql_sg.id]
 
   iam_database_authentication_enabled = true
   apply_immediately                   = true
   skip_final_snapshot                 = true
   enabled_cloudwatch_logs_exports     = ["postgresql"]
-  database_name                       = var.database_name
-  master_username                     = var.master_username
+#   database_name                       = var.database_name
+#   master_username                     = var.master_username
 }
